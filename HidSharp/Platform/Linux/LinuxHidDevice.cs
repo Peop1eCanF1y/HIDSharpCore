@@ -38,7 +38,9 @@ namespace HidSharp.Platform.Linux
         int _maxInput, _maxOutput, _maxFeature;
         bool _reportsUseID;
         string _path, _fileSystemName;
+        string _immutablePath;
 
+        //static object _lock = new object ();
         LinuxHidDevice()
         {
             _getInfoLock = new object();
@@ -74,6 +76,9 @@ namespace HidSharp.Platform.Linux
                                         string idVendor = NativeMethodsLibudev.Instance.udev_device_get_sysattr_value(parent, "idVendor");
                                         string idProduct = NativeMethodsLibudev.Instance.udev_device_get_sysattr_value(parent, "idProduct");
                                         string bcdDevice = NativeMethodsLibudev.Instance.udev_device_get_sysattr_value(parent, "bcdDevice");
+                                        string immutablePath = NativeMethodsLibudev.Instance.udev_device_get_devpath(parent);
+                                        if (string.IsNullOrEmpty(immutablePath))
+                                            immutablePath = path;
 
                                         int vid, pid, version;
                                         if (NativeMethods.TryParseHex(idVendor, out vid) &&
@@ -86,8 +91,36 @@ namespace HidSharp.Platform.Linux
                                             d._manufacturer = manufacturer;
                                             d._productName = productName;
                                             d._serialNumber = serialNumber;
+                                            d._immutablePath = immutablePath;
 
-                                            return d;
+                                            //lock (_lock)
+                                            //{
+                                            //    string busnum = NativeMethodsLibudev.Instance.udev_device_get_sysattr_value(parent, "busnum");
+                                            //    string devnum = NativeMethodsLibudev.Instance.udev_device_get_sysattr_value(parent, "devnum");
+                                            //    string portnum = NativeMethodsLibudev.Instance.udev_device_get_sysattr_value(parent, "portnum");
+                                            //    string devnodeParent = NativeMethodsLibudev.Instance.udev_device_get_devnode(parent);
+
+                                            //    IntPtr parentUsb = NativeMethodsLibudev.Instance.udev_device_get_parent_with_subsystem_devtype(device, "usb", "usb_interface");
+
+                                            //    string usbPath = NativeMethodsLibudev.Instance.udev_device_get_devpath(parentUsb);
+                                            //    string usbPath2 = NativeMethodsLibudev.Instance.udev_device_get_devpath(parent);
+
+                                            //    Console.WriteLine($"product: {productName} path: {usbPath} path2: {usbPath2}");
+                                            //    //Console.WriteLine($"devnodeParent: {devnodeParent} busnum: {busnum} devnum: {devnum} portnum: {portnum} pid: {pid} vid: {vid} product: {productName} serial:{serialNumber}");
+
+                                            //    string level = "\t";
+                                            //    IntPtr current = device;
+                                            //    while (IntPtr.Zero != current)
+                                            //    {
+                                            //        string devnodeParent2 = NativeMethodsLibudev.Instance.udev_device_get_devpath(current);
+                                            //        string subsystem = NativeMethodsLibudev.Instance.udev_device_get_subsystem(current);
+                                            //        string devType = NativeMethodsLibudev.Instance.udev_device_get_devtype(current);
+                                            //        //Console.WriteLine($"{level}devnodeParent2: {devnodeParent2} sub: {subsystem} devType: {devType}");
+                                            //        current = NativeMethodsLibudev.Instance.udev_device_get_parent(current);
+                                            //        level += "\t";
+                                            //    }
+                                                return d;
+                                            //}
                                         }
                                     }
                                 }
@@ -307,7 +340,7 @@ namespace HidSharp.Platform.Linux
 
         public override string DevicePath
         {
-            get { return _path; }
+            get { return _immutablePath; }
         }
 
         public override int VendorID

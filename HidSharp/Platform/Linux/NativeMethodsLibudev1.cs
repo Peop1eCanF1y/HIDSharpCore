@@ -215,5 +215,31 @@ namespace HidSharp.Platform.Linux
         {
             return native_udev_device_get_is_initialized(device);
         }
+
+
+        [DllImport(libudev, EntryPoint = "udev_device_get_subsystem")]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(Utf8Marshaler))]
+        static extern string native_udev_device_get_subsystem(IntPtr device);
+        public override string udev_device_get_subsystem(IntPtr device)
+        {
+            return native_udev_device_get_subsystem(device);
+        }
+
+
+        [DllImport(libudev, EntryPoint = "udev_device_get_devtype")]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(Utf8Marshaler))]
+        static extern string native_udev_device_get_devtype(IntPtr device);
+        public override string udev_device_get_devtype(IntPtr device)
+        {
+            return native_udev_device_get_devtype(device);
+        }
+
+
+        [DllImport(libudev, EntryPoint = "udev_device_get_parent")]
+        static extern IntPtr native_udev_device_get_parent(IntPtr device);
+        public override IntPtr udev_device_get_parent(IntPtr device)
+        {
+            return native_udev_device_get_parent(device);
+        }
     }
 }
