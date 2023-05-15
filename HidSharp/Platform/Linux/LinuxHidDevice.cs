@@ -40,7 +40,6 @@ namespace HidSharp.Platform.Linux
         string _path, _fileSystemName;
         string _immutablePath;
 
-        //static object _lock = new object ();
         LinuxHidDevice()
         {
             _getInfoLock = new object();
@@ -93,34 +92,7 @@ namespace HidSharp.Platform.Linux
                                             d._serialNumber = serialNumber;
                                             d._immutablePath = immutablePath;
 
-                                            //lock (_lock)
-                                            //{
-                                            //    string busnum = NativeMethodsLibudev.Instance.udev_device_get_sysattr_value(parent, "busnum");
-                                            //    string devnum = NativeMethodsLibudev.Instance.udev_device_get_sysattr_value(parent, "devnum");
-                                            //    string portnum = NativeMethodsLibudev.Instance.udev_device_get_sysattr_value(parent, "portnum");
-                                            //    string devnodeParent = NativeMethodsLibudev.Instance.udev_device_get_devnode(parent);
-
-                                            //    IntPtr parentUsb = NativeMethodsLibudev.Instance.udev_device_get_parent_with_subsystem_devtype(device, "usb", "usb_interface");
-
-                                            //    string usbPath = NativeMethodsLibudev.Instance.udev_device_get_devpath(parentUsb);
-                                            //    string usbPath2 = NativeMethodsLibudev.Instance.udev_device_get_devpath(parent);
-
-                                            //    Console.WriteLine($"product: {productName} path: {usbPath} path2: {usbPath2}");
-                                            //    //Console.WriteLine($"devnodeParent: {devnodeParent} busnum: {busnum} devnum: {devnum} portnum: {portnum} pid: {pid} vid: {vid} product: {productName} serial:{serialNumber}");
-
-                                            //    string level = "\t";
-                                            //    IntPtr current = device;
-                                            //    while (IntPtr.Zero != current)
-                                            //    {
-                                            //        string devnodeParent2 = NativeMethodsLibudev.Instance.udev_device_get_devpath(current);
-                                            //        string subsystem = NativeMethodsLibudev.Instance.udev_device_get_subsystem(current);
-                                            //        string devType = NativeMethodsLibudev.Instance.udev_device_get_devtype(current);
-                                            //        //Console.WriteLine($"{level}devnodeParent2: {devnodeParent2} sub: {subsystem} devType: {devType}");
-                                            //        current = NativeMethodsLibudev.Instance.udev_device_get_parent(current);
-                                            //        level += "\t";
-                                            //    }
-                                                return d;
-                                            //}
+                                            return d;
                                         }
                                     }
                                 }
